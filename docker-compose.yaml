@@ -1,81 +1,81 @@
-version: '3.9'
+  version: '3.9'
 
-services:
-  web:
-    build: . 
-    container_name: php-biblioteca
-    ports:
-      - "8080:80"
-    volumes:
-      - ./src:/var/www/html
-    depends_on:
-      - db
-    environment:
-      - APACHE_DOCUMENT_ROOT=/var/www/html
-    networks:
-      - app-network
+  services:
+    web:
+      build: . 
+      container_name: php-biblioteca
+      ports:
+        - "8080:80"
+      volumes:
+        - ./src:/var/www/html
+      depends_on:
+        - db
+      environment:
+        - APACHE_DOCUMENT_ROOT=/var/www/html
+      networks:
+        - app-network
 
-  db:
-    image: mysql:8.0
-    container_name: bibblioteca-db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: myapp_db
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - app-network
+    db:
+      image: mysql:8.0
+      container_name: bibblioteca-db
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: rootpassword
+        MYSQL_DATABASE: myapp_db
+        MYSQL_USER: myuser
+        MYSQL_PASSWORD: mypassword
+      volumes:
+        - db_data:/var/lib/mysql
+      networks:
+        - app-network
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin-bibblioteca
-    restart: always
-    ports:
-      - "8081:80"
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: rootpassword
-    depends_on:
-      - db
-    networks:
-      - app-network
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin-bibblioteca
+      restart: always
+      ports:
+        - "8081:80"
+      environment:
+        PMA_HOST: db
+        PMA_USER: root
+        PMA_PASSWORD: rootpassword
+      depends_on:
+        - db
+      networks:
+        - app-network
 
-  # 2FAUTH 
-  2fauth:
-    image: 2fauth/2fauth #scarico l'immagine ufficiale di 2FAuth 
-    container_name: 2fauth-app #nome del container per 2FAuth
-    restart: always #riavvia automaticamente in caso di crash affinchè i codici di 2FA siano sempre disponibili
-    ports:
-      - "8082:8000"
-    environment:
-      - APP_NAME=2FAuth-Biblioteca
-      - DB_CONNECTION=mysql #{
-      - DB_HOST=db #              Indicano a 2FAuth come connetersi al container 
-      - DB_PORT=3306 #        }
-      - DB_DATABASE=myapp_db # Si può usare lo stesso DB o crearne uno nuovo
-      - DB_USERNAME=myuser #credenziali per l'accesso ai dati
-      - DB_PASSWORD=mypassword
-      # Nota: APP_KEY è necessaria per la crittografia dei dati 
-      # Si può generarla con 'php artisan key:generate' o inserire una stringa di 32 caratteri. (Io ho usato una chiave generata da Laravel)
-      - APP_KEY=base64:eDdKSm+YE0kAvZbbVtrNM/6YKRYjA1fUGo7HmSrerdM=
-      - APP_URL=http://localhost:8082 # Serve all'applicazione per generare correttamente i link interni. 
-                                      #Poiché 2FAuth "funziona ovunque" come Web App,
-                                      # ha bisogno di sapere il suo indirizzo pubblico per servire correttamente fogli di stile e script al tuo browser
-    volumes:
-      - 2fauth_data:/srv/2FAuth/storage
-    depends_on:
-      - db
-    networks:
-      - app-network 
+    # 2FAUTH 
+    2fauth:
+      image: 2fauth/2fauth #scarico l'immagine ufficiale di 2FAuth 
+      container_name: 2fauth-app #nome del container per 2FAuth
+      restart: always #riavvia automaticamente in caso di crash affinchè i codici di 2FA siano sempre disponibili
+      ports:
+        - "8082:8000"
+      environment:
+        - APP_NAME=2FAuth-Biblioteca
+        - DB_CONNECTION=mysql #{
+        - DB_HOST=db #              Indicano a 2FAuth come connetersi al container 
+        - DB_PORT=3306 #        }
+        - DB_DATABASE=myapp_db # Si può usare lo stesso DB o crearne uno nuovo
+        - DB_USERNAME=myuser #credenziali per l'accesso ai dati
+        - DB_PASSWORD=mypassword
+        # Nota: APP_KEY è necessaria per la crittografia dei dati 
+        # Si può generarla con 'php artisan key:generate' o inserire una stringa di 32 caratteri. (Io ho usato una chiave generata da Laravel)
+        - APP_KEY=base64:eDdKSm+YE0kAvZbbVtrNM/6YKRYjA1fUGo7HmSrerdM=
+        - APP_URL=http://localhost:8082 # Serve all'applicazione per generare correttamente i link interni. 
+                                        #Poiché 2FAuth "funziona ovunque" come Web App,
+                                        # ha bisogno di sapere il suo indirizzo pubblico per servire correttamente fogli di stile e script al tuo browser
+      volumes:
+        - 2fauth_data:/srv/2FAuth/storage
+      depends_on:
+        - db
+      networks:
+        - app-network 
 
-volumes:  
-  db_data:
-  2fauth_data: # Volume per i dati persistenti di 2FAuth [4]
+  volumes:  
+    db_data:
+    2fauth_data: # Volume per i dati persistenti di 2FAuth [4]
 
-networks:
-  app-network:
-    driver: bridge
+  networks:
+    app-network:
+      driver: bridge

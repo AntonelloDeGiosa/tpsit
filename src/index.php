@@ -34,7 +34,7 @@ $secret = $totp->getSecret();
 
         <!-- Colonna destra: form -->
         <div class="col form-container">
-            <form action="login.php" method="post">
+            <form action="register.php" method="post">
                 <label for="nome">Nome:</label>
                 <input type="text" id="nome" name="nome" required>
 
