@@ -1,61 +1,85 @@
 <?php
 require 'vendor/autoload.php';
-
 use OTPHP\TOTP;
 
 
- // Connessione DB
- 
-        $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
-    
 
-        $username = isset($_POST['username']) ? $_POST['username'] : '';
-        $password = isset($_POST['password']) ? $_POST['password'] : '';
-        $codice   = isset($_POST['totp']) ? $_POST['totp'] : '';
+// Connessione DB
+$conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
 
-    
+$errore = "";
+
+// Esegui login solo se il form è stato inviato
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+   $username = isset($_POST['username']) ? $_POST['username'] : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
+     $codice = isset($_POST['totp']) ? $_POST['totp'] : '';
+
+    // Cerca utente
+    $stmt = $conn->prepare("SELECT id,ruolo,password, totp_secret FROM user WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+
+        $user = $result->fetch_assoc();
+
+        // Verifica password
+        if (password_verify($password, $user['password'])) {
+
+            // Verifica TOTP
+            $totp = TOTP::create($user['totp_secret']);
+
+            if ($totp->verify($codice)) {
+                session_start();
+
+                    $id_utente = $user['id'];
+                    $ruolo = $user['ruolo'];
+
+                    // crea id sessione
+                    $id_sessione = bin2hex(random_bytes(32));
+                    $login_time = date("Y-m-d H:i:s");
+                    $scadenza = date("Y-m-d H:i:s", time() + 1800);
+
+                    // salva sessione DB
+                    $stmt2 = $conn->prepare("INSERT INTO sessioni (id_sessione, id_utente, login, scadenza) VALUES (?, ?, ?, ?)");
+                    $stmt2->bind_param("siss", $id_sessione, $id_utente, $login_time, $scadenza);
+                    $stmt2->execute();
+
+                    // sessione PHP
+                    $_SESSION['id_sessione'] = $id_sessione;
+                    $_SESSION['id_utente'] = $id_utente;
+                    $_SESSION['username'] = $username;
+                    $_SESSION['ruolo'] = $ruolo;
+
+                    // redirect in base al ruolo
+                    if ($ruolo == 0) {
+                        header("Location: dashboard.php");
+                    } else {
+                        header("Location: amministrazione.php");
+                    }
+                    exit();
 
 
-        // Cerca utente
-        $stmt = $conn->prepare("SELECT password, totp_secret FROM user WHERE username = ?");
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        
+                
 
-        if ($result->num_rows === 1) {
-
-            $user = $result->fetch_assoc();
-
-            // Verifica password
-            if (password_verify($password, $user['password'])) {
-
-                // Ricrea TOTP con la secret salvata
-                $totp = TOTP::create($user['totp_secret']);
-
-                // Verifica codice
-                if ($totp->verify($codice)) {
-                    echo "Login riuscito!";
-                    // session_start(); ecc.
-                } else {
-                    echo "Codice TOTP errato.";
-                    echo '<br><a href="login.html">Torna al login</a>';
-                }
-
+                
+                
+            
             } else {
-                echo "Password errata.";
-                echo '<br><a href="login.html">Torna al login</a>';
+                $errore = "Codice TOTP errato.";
             }
 
         } else {
-            echo "Utente non trovato.";
-            echo '<br><a href="login.html">Torna al login</a>';
-        }
-    
+            $errore = "Password errata.";
         }
 
+    } else {
+        $errore = "Utente non trovato.";
+    }
+}
 ?>
 
 
@@ -65,6 +89,11 @@ use OTPHP\TOTP;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accedi</title>
+     <?php if (!empty($errore)) : ?>
+        <p style="color:red; font-weight:bold;">
+            <?php echo $errore; ?>
+        </p>
+    <?php endif; ?>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>

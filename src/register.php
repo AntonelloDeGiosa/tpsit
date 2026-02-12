@@ -13,11 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $secret = $_POST['secret'];
+    $email = $_POST['email'];
+    $ruolo = 0; // default ruolo utente
+    $data_registrazione = date("Y-m-d H:i:s");
 
-    $stmt = $conn->prepare("INSERT INTO user (nome, cognome, username, password, totp_secret) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $nome, $cognome, $username, $password, $secret);
+    $stmt = $conn->prepare("INSERT INTO user (nome, cognome, username, password, totp_secret, email, ruolo, registrazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssis", $nome, $cognome, $username, $password, $secret, $email, $ruolo, $data_registrazione);
     $stmt->execute();
-
     header("Location: login.php");
     exit();
 }
