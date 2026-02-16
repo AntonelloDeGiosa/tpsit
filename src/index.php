@@ -41,6 +41,9 @@ $secret = $totp->getSecret();
                 <label for="cognome">Cognome:</label>
                 <input type="text" id="cognome" name="cognome" required>
 
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
 

@@ -1,0 +1,111 @@
+
+    /* Importazione di un font più moderno */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+    body {
+        font-family: 'Inter', sans-serif;
+         background: linear-gradient(135deg, #667eea, #764ba2);
+        margin: 0;
+        padding: 40px 20px;
+        color: #2d3436;
+        min-height: 100vh;
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: 600;
+        letter-spacing: -1px;
+        margin-bottom: 40px;
+        color: #1a1a1a;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsivo! */
+        gap: 25px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .menu {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 16px;
+        /* Ombra morbida e profonda */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #f0f0f0;
+    }
+
+    .menu:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .menu a {
+        display: flex;
+        align-items: center;
+        color: #444;
+        text-decoration: none;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 8px;
+        transition: background 0.2s ease, color 0.2s ease;
+        font-weight: 400;
+    }
+
+    /* Effetto al passaggio del mouse sui link */
+    .menu a:hover {
+        background-color: #f8f9fa;
+        color: #007AFF; /* Blu stile Apple */
+        text-decoration: none;
+    }
+
+    /* Un piccolo tocco per l'ultimo link di ogni card */
+    .menu a:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Icone simulate (opzionale, aggiunge carattere) */
+    .menu a::before {
+        content: '→';
+        margin-right: 12px;
+        font-weight: bold;
+        opacity: 0.5;
+    }
+
+    /* Contenitore per centrare il tasto */
+.logout-wrapper {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.logout-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: rgba(255, 255, 255, 0.2); /* Sfondo semi-trasparente */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px; /* Forma a pillola */
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px); /* Effetto vetro sfocato */
+}
+
+.logout-link:hover {
+    background-color: #ff4757; /* Rosso pastello al passaggio */
+    border-color: #ff4757;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    color: white;
+}
+
+/* Iconcina "esci" prima del testo */
+.logout-link::before {
+    content: '✕'; 
+    margin-right: 8px;
+    font-size: 1.1rem;
+}

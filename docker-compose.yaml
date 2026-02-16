@@ -65,6 +65,7 @@
         - APP_URL=http://localhost:8082 # Serve all'applicazione per generare correttamente i link interni. 
                                         #Poiché 2FAuth "funziona ovunque" come Web App,
                                         # ha bisogno di sapere il suo indirizzo pubblico per servire correttamente fogli di stile e script al tuo browser
+        - APP_TIMEZONE=Europe/Rome
       volumes:
         - 2fauth_data:/srv/2FAuth/storage
       depends_on:

@@ -19,3 +19,22 @@ CREATE TABLE sessioni (
     logout DATETIME NULL,
     FOREIGN KEY (id_utente) REFERENCES user(id)
 );
+
+CREATE TABLE libri (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titolo VARCHAR(255),
+    autore VARCHAR(255),
+    descrizione TEXT,
+    copie_totali INT DEFAULT 0,
+    copie_disponibili INT DEFAULT 0
+);
+
+
+CREATE TABLE prestiti (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_utente INT,
+    id_libro INT,
+    data_prestito DATETIME,
+    data_restituzione DATETIME NULL,
+    restituito TINYINT DEFAULT 0
+);
