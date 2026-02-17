@@ -147,6 +147,7 @@ Dopo l’import del database è possibile utilizzare per accedere:
 
 ```
 Email: admin@admin.it
+Username:admin
 Password: admin
 Chiave (da inserire in 2FAuth (http://localhost:8082)): CAWDIC3VTL3YRLZ3IIGM6OQU6J5OAYZ5G72I74MJDTNLBCWP3AD5DFFKPQ5U2C6HGRZDOEZ47JXXMZFDUZNDS53V2X2PUXX6CBRVQWY
 Con queste credenziali si accede alla parte dedicata all'admin.
