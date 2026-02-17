@@ -204,7 +204,15 @@ body {
             <?php while($libro = $result->fetch_assoc()): ?>
                 <div class="libro">
                     <?php
-                    $img = $libro['immagine'] ? $libro['immagine'] : 'copertine/default.jpg';
+                    $nome_file = $libro['immagine'];
+                    $percorso_cartella = 'copertine/'; 
+
+            if (!empty($nome_file) && file_exists($percorso_cartella . $nome_file)) {
+                $img = $percorso_cartella . $nome_file;
+            } else {
+                $img = $percorso_cartella . 'default.jpg'; 
+            }
+
                     ?>
                     <img src="<?php echo htmlspecialchars($img); ?>" alt="Copertina">
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['id_sessione']) || $_SESSION['ruolo'] != 1){
+if(!isset($_SESSION['id_sessione']) || ($_SESSION['ruolo'] != 1 && $_SESSION['ruolo'] != 2)){
     header("Location: login.php");
     exit();
 }
@@ -19,10 +19,14 @@ if(!isset($_SESSION['id_sessione']) || $_SESSION['ruolo'] != 1){
 
 <div class="container">
     <div class="menu">
-        <a href="libri.php">Gestione Libri</a>
-        <a href="copie.php">Gestione Copie</a>
-        <a href="prestiti.php">Prestiti</a>
-        <a href="bibliotecari.php">Bibliotecari</a>
+        <a href="copie.php">Gestione Libri</a>
+        <a href="prestiti_attivi.php">Prestiti</a>
+        <?php
+            if ($_SESSION['ruolo'] == 2) { // Solo se è admin
+                echo '<a href="gestione_bibliotecari.php">Bibliotecari</a>';
+            }
+        ?>      
+       
     </div>
 </div>
 
