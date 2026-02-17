@@ -20,19 +20,19 @@ $secret = $totp->getSecret();
     <h1>Registrati</h1>
 
     <div class="container">
-        <!-- Colonna sinistra: istruzioni -->
+        
         <div class="col istruzioni">
             <h3>Istruzioni per la registrazione</h3>
             <p>
                 Inserisci correttamente tutti i campi obbligatori.<br><br>
                 La chiave TOTP verrà usata per proteggere il tuo account,<br>
                 copiala e inseriscila in un'app di autenticazione (es. Google Authenticator o quella offerta da noi) per generare i codici di accesso.<br>
-                Al termine della registrazione dovrai accedere al tuo accountinserendo username, password e il codice TOTP generato dall'app.<br><br>\  
+                Al termine della registrazione dovrai accedere al tuo accountinserendo username, password e il codice TOTP generato dall'app.<br><br>
                 Dopo la registrazione potrai usare il tuo account per accedere in sicurezza.
             </p>
         </div>
 
-        <!-- Colonna destra: form -->
+        
         <div class="col form-container">
             <form action="register.php" method="post">
                 <label for="nome">Nome:</label>
@@ -50,7 +50,7 @@ $secret = $totp->getSecret();
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
 
-                <label for="codice">Chiave TOTP (readonly):</label>
+                <label for="codice">Chiave TOTP (conservala):</label>
                 <input type="text" id="codice" name="secret" value="<?php echo htmlspecialchars($secret); ?>" readonly>
 
                 <input type="submit" value="Registrati">

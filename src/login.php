@@ -31,13 +31,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($totp->verify($codice)) {
 
-                // Sicurezza: nuovo ID sessione
+                
                 session_regenerate_id(true);
 
                 $id_utente = $user['id'];
                 $ruolo = $user['ruolo'];
 
-                // ID sessione applicativa (DB)
+                
                 $id_sessione = bin2hex(random_bytes(32));
                 $login_time = date("Y-m-d H:i:s");
                 $scadenza = date("Y-m-d H:i:s", time() + 1800);
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt2->bind_param("siss", $id_sessione, $id_utente, $login_time, $scadenza);
                 $stmt2->execute();
 
-                // Variabili di sessione PHP
+                
                 $_SESSION['id_sessione'] = $id_sessione;
                 $_SESSION['id_utente'] = $id_utente;
                 $_SESSION['username'] = $username;

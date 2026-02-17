@@ -2,23 +2,19 @@
 session_start();
 $messaggio = "";
 
-// Controllo login
 if (!isset($_SESSION['id_sessione'])) {
     header("Location: login.php");
     exit();
 }
 
-// Connessione DB
+
 $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
 
-// ==========================
 // RESTITUZIONE LIBRO
-// ==========================
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_prestito'])) {
 
     $id_prestito = (int)$_POST['id_prestito'];
 
-    // Prendi id_libro del prestito
     $stmt_libro = $conn->prepare("SELECT id_libro FROM prestiti WHERE id = ? AND id_utente = ? AND restituito = 0");
     $stmt_libro->bind_param("ii", $id_prestito, $_SESSION['id_utente']);
     $stmt_libro->execute();
@@ -38,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_prestito'])) {
         $stmt->bind_param("sii", $data_restituzione, $id_prestito, $_SESSION['id_utente']);
 
         if ($stmt->execute()) {
-            // Incrementa copie disponibili
+    
             $stmt_update = $conn->prepare("UPDATE libri SET copie_disponibili = copie_disponibili + 1 WHERE id = ?");
             $stmt_update->bind_param("i", $id_libro);
             $stmt_update->execute();
@@ -52,9 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_prestito'])) {
     }
 }
 
-// ==========================
 // ELENCO PRESTITI ATTIVI
-// ==========================
 $stmt = $conn->prepare("
     SELECT p.id AS id_prestito, l.titolo, l.autore, l.immagine, p.data_prestito, p.data_restituzione
     FROM prestiti p
@@ -163,7 +157,7 @@ body {
 
 .restituisci-btn {
     padding: 8px 14px;
-    background: #ff6b81; /* rosso pastello */
+    background: #ff6b81; 
     border: none;
     border-radius: 6px;
     color: white;

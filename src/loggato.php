@@ -4,7 +4,7 @@ require 'vendor/autoload.php';
 use OTPHP\TOTP;
 
 
- // Connessione DB
+ 
         $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
 
         $username = isset($_POST['username']) ? $_POST['username'] : '';
@@ -31,7 +31,6 @@ use OTPHP\TOTP;
                 // Verifica codice
                 if ($totp->verify($codice)) {
                     echo "Login riuscito!";
-                    // session_start(); ecc.
                 } else {
                     echo "Codice TOTP errato.";
                     echo '<br><a href="login.php">Torna al login</a>';

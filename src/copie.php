@@ -1,25 +1,21 @@
 <?php
 session_start();
 $messaggio = "";
-
-// Permetti accesso ad admin (0) e bibliotecario (1)
 if (!isset($_SESSION['id_sessione']) || ($_SESSION['ruolo'] != 1 && $_SESSION['ruolo'] != 2)) {
     header("Location: login.php");
     exit();
 }
-
-// Connessione DB
 $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
 
-// ==========================
+
 // GESTIONE COPIE (AGGIUNGI / RIMUOVI)
-// ==========================
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['azione']) && isset($_POST['id_libro'])) {
     $id_libro = (int)$_POST['id_libro'];
     $azione = $_POST['azione'];
 
     if ($azione === 'aggiungi') {
-        // Incrementa sia totali che disponibili
+        
         $stmt = $conn->prepare("UPDATE libri SET copie_totali = copie_totali + 1, copie_disponibili = copie_disponibili + 1 WHERE id = ?");
         $stmt->bind_param("i", $id_libro);
         if ($stmt->execute()) {
@@ -27,14 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['azione']) && isset($_P
         }
     } 
     elseif ($azione === 'rimuovi') {
-        // Controlla prima se ci sono copie da rimuovere (evitiamo numeri negativi)
         $check = $conn->prepare("SELECT copie_totali, copie_disponibili FROM libri WHERE id = ?");
         $check->bind_param("i", $id_libro);
         $check->execute();
         $info = $check->get_result()->fetch_assoc();
 
         if ($info['copie_totali'] > 0 && $info['copie_disponibili'] > 0) {
-            // Decrementa sia totali che disponibili
             $stmt = $conn->prepare("UPDATE libri SET copie_totali = copie_totali - 1, copie_disponibili = copie_disponibili - 1 WHERE id = ?");
             $stmt->bind_param("i", $id_libro);
             $stmt->execute();
@@ -45,9 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['azione']) && isset($_P
     }
 }
 
-// ==========================
 // RICERCA LIBRI
-// ==========================
 $ricerca = isset($_GET['q']) ? trim($_GET['q']) : '';
 
 if ($ricerca != '') {

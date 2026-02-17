@@ -4,20 +4,18 @@ require 'vendor/autoload.php';
 
 use OTPHP\TOTP;
 
-// Solo amministratore
+
 if (!isset($_SESSION['id_sessione']) || $_SESSION['ruolo'] != 2) {
     header("Location: login.php");
     exit();
 }
 
-// Connessione DB
 $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
 
 $messaggio = "";
 
-// ==========================
 // AGGIUNTA BIBLIOTECARIO
-// ==========================
+
 if (isset($_POST['azione']) && $_POST['azione'] == 'aggiungi') {
 
     $nome = $_POST['nome'];
@@ -28,7 +26,7 @@ if (isset($_POST['azione']) && $_POST['azione'] == 'aggiungi') {
     $ruolo = 1;
     $data_registrazione = date("Y-m-d H:i:s");
 
-    // Genera TOTP
+    
     $totp = TOTP::create();
     $secret = $totp->getSecret();
 
@@ -45,9 +43,8 @@ if (isset($_POST['azione']) && $_POST['azione'] == 'aggiungi') {
     }
 }
 
-// ==========================
 // LICENZIA BIBLIOTECARIO
-// ==========================
+
 if (isset($_POST['azione']) && $_POST['azione'] == 'licenzia') {
 
     $id = (int)$_POST['id'];
@@ -59,9 +56,8 @@ if (isset($_POST['azione']) && $_POST['azione'] == 'licenzia') {
     $messaggio = "Bibliotecario rimosso.";
 }
 
-// ==========================
+
 // LISTA BIBLIOTECARI
-// ==========================
 $result = $conn->query("SELECT id, nome, cognome, email, username, totp_secret FROM user WHERE ruolo = 1 ORDER BY cognome");
 
 ?>
@@ -75,7 +71,7 @@ $result = $conn->query("SELECT id, nome, cognome, email, username, totp_secret F
 <style>
 body {
     font-family: Arial;
-    background: linear-gradient(135deg,#1e3c72,#2a5298);
+    background: linear-gradient(135deg, #667eea, #764ba2);
     margin: 0;
     color: white;
 }
@@ -190,10 +186,8 @@ function toggleForm() {
         <div class="messaggio"><?php echo htmlspecialchars($messaggio); ?></div>
     <?php endif; ?>
 
-    <!-- Pulsante toggle -->
     <button class="toggle-btn" onclick="toggleForm()">Aggiungi Bibliotecario</button>
 
-    <!-- Form a scomparsa -->
     <div class="form-container" id="formBibliotecario">
         <form method="post">
             <input type="hidden" name="azione" value="aggiungi">

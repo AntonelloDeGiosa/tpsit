@@ -3,7 +3,7 @@ require 'vendor/autoload.php';
 
 use OTPHP\TOTP;
 
-// Connessione DB
+
 $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $secret = $_POST['secret'];
     $email = $_POST['email'];
-    $ruolo = 0; // default ruolo utente
+    $ruolo = 0;
     $data_registrazione = date("Y-m-d H:i:s");
 
     $stmt = $conn->prepare("INSERT INTO user (nome, cognome, username, password, totp_secret, email, ruolo, registrazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");

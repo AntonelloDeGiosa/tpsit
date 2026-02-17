@@ -2,24 +2,20 @@
 session_start();
 $messaggio = "";
 
-// Permetti accesso ad admin (0) e bibliotecario (1)
 if (!isset($_SESSION['id_sessione']) || ($_SESSION['ruolo'] != 0 && $_SESSION['ruolo'] != 1)) {
     header("Location: login.php");
     exit();
 }
 
-// Connessione DB
+
 $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
 
-// ==========================
 // PRESTITO LIBRO
-// ==========================
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_libro'])) {
 
     $id_libro = (int)$_POST['id_libro'];
     $id_utente = $_SESSION['id_utente'];
 
-    // Controlla se esiste già un prestito non restituito
     $check = $conn->prepare("
         SELECT id 
         FROM prestiti 
@@ -34,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_libro'])) {
     if ($res->num_rows > 0) {
         $messaggio = "Hai già questo libro in prestito!";
     } else {
-        // Controlla se ci sono copie disponibili
+        
         $stmt_copie = $conn->prepare("SELECT copie_disponibili FROM libri WHERE id = ?");
         $stmt_copie->bind_param("i", $id_libro);
         $stmt_copie->execute();
@@ -54,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_libro'])) {
             $stmt->bind_param("iiss", $id_utente, $id_libro, $data_prestito, $data_restituzione);
 
             if ($stmt->execute()) {
-                // Decrementa copie disponibili
                 $stmt_update = $conn->prepare("UPDATE libri SET copie_disponibili = copie_disponibili - 1 WHERE id = ?");
                 $stmt_update->bind_param("i", $id_libro);
                 $stmt_update->execute();
@@ -66,10 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_libro'])) {
         }
     }
 }
-
-// ==========================
 // RICERCA LIBRI
-// ==========================
 $ricerca = isset($_GET['q']) ? trim($_GET['q']) : '';
 
 if ($ricerca != '') {
@@ -98,7 +90,7 @@ body {
     color: white;
 }
 
-/* Pulsante dashboard */
+
 .logout-wrapper {
     position: absolute;
     top: 20px;
@@ -133,7 +125,7 @@ body {
     margin-right: 8px;
 }
 
-/* Contenitore */
+
 .container {
     max-width: 900px;
     margin: 80px auto;
@@ -143,7 +135,7 @@ body {
     backdrop-filter: blur(10px);
 }
 
-/* Barra ricerca */
+
 .search-bar {
     width: 100%;
     padding: 12px;
@@ -153,13 +145,13 @@ body {
     font-size: 16px;
 }
 
-/* Lista libri scrollabile */
+
 .lista-libri {
     max-height: 500px;
     overflow-y: auto;
 }
 
-/* Singolo libro */
+
 .libro {
     display: flex;
     align-items: center;
@@ -174,7 +166,7 @@ body {
     background: rgba(255,255,255,0.25);
 }
 
-/* Immagine */
+
 .libro img {
     width: 70px;
     height: 100px;
@@ -183,7 +175,7 @@ body {
     margin-right: 15px;
 }
 
-/* Testo */
+
 .libro-info {
     flex: 1;
 }
@@ -198,7 +190,7 @@ body {
 }
 .presta-btn {
     padding: 10px 20px;
-    background-color: #2ed573; /* verde brillante */
+    background-color: #2ed573; 
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -209,13 +201,13 @@ body {
 }
 
 .presta-btn:hover {
-    background-color: #20bf6b; /* verde più scuro */
+    background-color: #20bf6b;
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.25);
 }
 
 .presta-btn:disabled {
-    background-color: #999; /* grigio spento */
+    background-color: #999;
     cursor: not-allowed;
     box-shadow: none;
 }
@@ -239,19 +231,17 @@ body {
 <?php endif; ?>
 
 
-    <!-- Barra ricerca -->
+    
     <form method="get">
         <input class="search-bar" type="text" name="q" placeholder="Cerca per titolo o autore..." value="<?php echo htmlspecialchars($ricerca); ?>">
     </form>
-
-    <!-- Lista libri -->
    <div class="lista-libri">
     <?php while($libro = $result->fetch_assoc()): ?>
         <div class="libro">
             <?php
           
             $nome_file = $libro['immagine'];
-            $percorso_cartella = 'copertine/'; // Assicurati che il nome sia identico alla cartella reale
+            $percorso_cartella = 'copertine/'; 
 
             if (!empty($nome_file) && file_exists($percorso_cartella . $nome_file)) {
                 $img = $percorso_cartella . $nome_file;
@@ -259,7 +249,6 @@ body {
                 $img = $percorso_cartella . 'default.jpg'; 
             }
 
-            // Controlla se l'utente ha già questo libro in prestito
             $checkPrestito = $conn->prepare("
                 SELECT id 
                 FROM prestiti 
@@ -280,7 +269,7 @@ body {
                 <p>Descrizione: <?php echo htmlspecialchars($libro['descrizione']); ?></p>
             </div>
 
-            <!-- Pulsante prestito -->
+            
             <?php if (!$giaInPrestito): ?>
                 <form method="post">
                     <input type="hidden" name="id_libro" value="<?php echo $libro['id']; ?>">

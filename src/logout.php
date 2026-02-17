@@ -2,7 +2,7 @@
 date_default_timezone_set('Europe/Rome');
 session_start();
 
-// Connessione e update logout (se serve)
+
 if (isset($_SESSION['id_sessione'])) {
 
     $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
@@ -19,14 +19,14 @@ if (isset($_SESSION['id_sessione'])) {
     }
 }
 
-// 1. Svuota variabili sessione
+
 $_SESSION = [];
 
-// 2. Elimina cookie PHPSESSID
+//Elimina cookie PHPSESSID
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(
-        session_name(),   // PHPSESSID
+        session_name(),   
         '',
         time() - 42000,
         $params["path"],
@@ -36,10 +36,8 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// 3. Distrugge sessione lato server
+//Distruggo sessione lato server
 session_destroy();
-
-// Redirect
 header("Location: login.php");
 exit();
 ?>

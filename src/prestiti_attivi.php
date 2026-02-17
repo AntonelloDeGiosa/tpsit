@@ -2,18 +2,15 @@
 session_start();
 $messaggio = "";
 
-// Permetti accesso ad admin (0) e bibliotecario (1)
 if (!isset($_SESSION['id_sessione'])  || ($_SESSION['ruolo'] != 1 && $_SESSION['ruolo'] != 2)) {
     header("Location: login.php");
     exit();
 }
 
-// Connessione DB
 $conn = new mysqli("db", "myuser", "mypassword", "myapp_db");
 
-// ==========================
-// LOGICA RESTITUZIONE
-// ==========================
+//RESTITUZIONE
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_prestito'])) {
     $id_prestito = (int)$_POST['id_prestito'];
     $id_libro = (int)$_POST['id_libro'];
@@ -34,10 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_prestito'])) {
     }
 }
 
-// ==========================
-// RECUPERO STORICO PRESTITI
-// ==========================
-// Usiamo una JOIN per avere i nomi degli utenti e i titoli dei libri
+//STORICO PRESTITI
+
 $query = "
     SELECT p.id, p.id_libro, p.data_prestito, p.data_restituzione, p.restituito, 
            u.username, l.titolo 
@@ -57,7 +52,7 @@ $result = $conn->query($query);
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             margin: 0;
             color: white;
             min-height: 100vh;
