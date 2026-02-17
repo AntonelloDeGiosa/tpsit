@@ -159,6 +159,15 @@ Qui si potrà aggiornare:
 
 (In alternativa è possibile registrare un nuovo utente che sarà studente)
 
+Per velocizzare ecco un account su 2FAuth per l'utente di test admin
+
+```
+Nome: prova
+Email:admin@example.com
+Password: admin123
+
+```
+
 ---
 
 ## Autenticazione a due fattori (2FA)
