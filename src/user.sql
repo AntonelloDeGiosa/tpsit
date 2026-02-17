@@ -20,21 +20,8 @@ CREATE TABLE sessioni (
     FOREIGN KEY (id_utente) REFERENCES user(id)
 );
 
-CREATE TABLE libri (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    titolo VARCHAR(255),
-    autore VARCHAR(255),
-    descrizione TEXT,
-    copie_totali INT DEFAULT 0,
-    copie_disponibili INT DEFAULT 0
-);
 
 
-CREATE TABLE prestiti (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_utente INT,
-    id_libro INT,
-    data_prestito DATETIME,
-    data_restituzione DATETIME NULL,
-    restituito TINYINT DEFAULT 0
-);
+INSERT INTO user (nome, cognome, email, username, password, totp_secret, ruolo) VALUES 
+('Admin', 'admin', 'admin@example.com', 'admin', '$2y$10$px4seOzDmkt/VWy17u92/.ImrvFxPMQ3MOfKUbT6nbRCNbpF.zF8G', 'CAWDIC3VTL3YRLZ3IIGM6OQU6J5OAYZ5G72I74MJDTNLBCWP3AD5DFFKPQ5U2C6HGRZDOEZ47JXXMZFDUZNDS53V2X2PUXX6CBRVQWY',2);
+

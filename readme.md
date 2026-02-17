@@ -141,17 +141,22 @@ src/user.sql
 
 ---
 
-## Utente di test (consigliato)
+## Utente di test 
 
-Dopo l’import del database è possibile utilizzare:
+Dopo l’import del database è possibile utilizzare per accedere:
 
 ```
 Email: admin@admin.it
 Password: admin
-Ruolo: Admin
+Chiave (da inserire in 2FAuth (http://localhost:8082)): CAWDIC3VTL3YRLZ3IIGM6OQU6J5OAYZ5G72I74MJDTNLBCWP3AD5DFFKPQ5U2C6HGRZDOEZ47JXXMZFDUZNDS53V2X2PUXX6CBRVQWY
+Con queste credenziali si accede alla parte dedicata all'admin.
+Qui si potrà aggiornare:
+1. aggiornare il numero di copie 
+2.Visuallizare i prestiti attivi 
+3. Gestire Bibliotecari
 ```
 
-(In alternativa è possibile registrare un nuovo utente.)
+(In alternativa è possibile registrare un nuovo utente che sarà studente)
 
 ---
 
